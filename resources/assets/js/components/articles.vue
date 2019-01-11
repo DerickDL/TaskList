@@ -1,25 +1,25 @@
 <template>
   <div>
-      <div class="field">
-          <label class="label">Task Title</label>
-          <div class="control">
-              <input v-model="article.title" type="text" class="input" name="title">
-          </div>
-      </div>
-      <div class="field">
-          <label class="label">Task Description</label>
-          <div class="control">
-          <textarea v-model="article.body" name="body" cols="30" rows="10" class="textarea">
-      </textarea>
-          </div>
-      </div>
-      <div class="level is-mobile">
-          <div class="level-left"></div>
-          <div class="level-right">
-              <button type="button" class="button is-success level-item" v-on:click="addArticle">Save</button>
-              <button type="button" class="button is-danger level-item">Cancel</button>
-          </div>
-      </div>
+      <!--<div class="field">-->
+          <!--<label class="label">Task Title</label>-->
+          <!--<div class="control">-->
+              <!--<input v-model="article.title" type="text" class="input" name="title">-->
+          <!--</div>-->
+      <!--</div>-->
+      <!--<div class="field">-->
+          <!--<label class="label">Task Description</label>-->
+          <!--<div class="control">-->
+          <!--<textarea v-model="article.body" name="body" cols="30" rows="10" class="textarea">-->
+      <!--</textarea>-->
+          <!--</div>-->
+      <!--</div>-->
+      <!--<div class="level is-mobile">-->
+          <!--<div class="level-left"></div>-->
+          <!--<div class="level-right">-->
+              <!--<button type="button" class="button is-success level-item" v-on:click="addArticle">Save</button>-->
+              <!--<button type="button" class="button is-danger level-item">Cancel</button>-->
+          <!--</div>-->
+      <!--</div>-->
       <!--<nav>-->
         <!--<ul class="pagination">-->
             <!--<li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item">-->
@@ -32,8 +32,14 @@
             <!--</li>-->
         <!--</ul>-->
       <!--</nav>-->
+      <div class="card card-body mb-2" v-for="article in articles" v-bind:key="article.id">
+          <h3>{{article.title}}</h3>
+          <p>{{article.body}}</p>
+          <button class="button is-info" @click="editArticle(article)">Edit</button>
+          <button class="button is-warning" @click="deleteArticle(article.id)">Delete</button>
+      </div>
       <div class="columns">
-          <div class="column is-one-third is-offset-one-third">
+          <div class="column is-narrow">
               <b-pagination
                       :total="total"
                       :current.sync="current"
@@ -45,12 +51,6 @@
                       @change="changePage">
               </b-pagination>
           </div>
-      </div>
-      <div class="card card-body mb-2" v-for="article in articles" v-bind:key="article.id">
-          <h3>{{article.title}}</h3>
-          <p>{{article.body}}</p>
-          <button class="button is-info" @click="editArticle(article)">Edit</button>
-          <button class="button is-warning" @click="deleteArticle(article.id)">Delete</button>
       </div>
   </div>
 </template>
