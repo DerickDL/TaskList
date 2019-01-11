@@ -9,12 +9,17 @@
       <div class="field">
           <label class="label">Task Description</label>
           <div class="control">
-              <textarea v-model="article.body" name="body" cols="30" rows="10" class="textarea">
-          </textarea>
+          <textarea v-model="article.body" name="body" cols="30" rows="10" class="textarea">
+      </textarea>
           </div>
       </div>
-      <button type="button" class="button is-normal is-fullwidth" v-on:click="addArticle">Save</button>
-
+      <div class="level is-mobile">
+          <div class="level-left"></div>
+          <div class="level-right">
+              <button type="button" class="button is-success level-item" v-on:click="addArticle">Save</button>
+              <button type="button" class="button is-danger level-item">Cancel</button>
+          </div>
+      </div>
       <!--<nav>-->
         <!--<ul class="pagination">-->
             <!--<li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item">-->
@@ -27,22 +32,24 @@
             <!--</li>-->
         <!--</ul>-->
       <!--</nav>-->
-      <b-pagination
-              :total="total"
-              :current.sync="current"
-              :order="order"
-              :size="size"
-              :simple="isSimple"
-              :rounded="isRounded"
-              :per-page="perPage">
-      </b-pagination>
+      <div class="columns">
+          <div class="column is-one-third is-offset-one-third">
+              <b-pagination
+                      :total="total"
+                      :current.sync="current"
+                      :order="order"
+                      :size="size"
+                      :simple="isSimple"
+                      :rounded="isRounded"
+                      :per-page="perPage"
+                      @change="changePage">
+              </b-pagination>
+          </div>
+      </div>
       <div class="card card-body mb-2" v-for="article in articles" v-bind:key="article.id">
           <h3>{{article.title}}</h3>
           <p>{{article.body}}</p>
-          <button class="button is-info" @click="editArticle(article)">
-              <b-icon icon="twitter"></b-icon>
-              Edit
-          </button>
+          <button class="button is-info" @click="editArticle(article)">Edit</button>
           <button class="button is-warning" @click="deleteArticle(article.id)">Delete</button>
       </div>
   </div>
@@ -75,11 +82,10 @@
             this.fetchArticles();
         },
         methods: {
-            pageChange (page) {
-                console.log(page);
+            changePage(iPage) {
+                this.fetchArticles('/api/articles?page=' + iPage);
             },
             fetchArticles(page_url) {
-                console.log(page_url);
                 let vm = this;
                 page_url = page_url || '/api/articles';
                 this.current_page = page_url;
@@ -91,8 +97,6 @@
                 });
             },
             makePagination(meta, links) {
-                console.log(meta);
-                console.log(links);
                 this.current = meta.current_page;
                 this.total = meta.total;
                 if (meta.current_page > meta.last_page) {
