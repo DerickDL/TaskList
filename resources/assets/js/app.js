@@ -5,6 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+window.$ = window.jQuery = require('jquery');
 
 import Vue from 'vue';
 import Buefy from 'buefy';
@@ -17,7 +18,7 @@ import 'buefy/dist/buefy.css';
  */
 Vue.use(Buefy);
 Vue.component('articles', require('./components/articles.vue'));
-Vue.component('navbar', require('./components/navbar.vue'));
+Vue.component('navbar-template', require('./components/navbar-template.vue'));
 
 const app = new Vue({
     el: '#app'
