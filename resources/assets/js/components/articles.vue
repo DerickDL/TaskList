@@ -32,12 +32,18 @@
             <!--</li>-->
         <!--</ul>-->
       <!--</nav>-->
-      <div class="card card-body mb-2" v-for="article in articles" v-bind:key="article.id">
-          <h3>{{article.title}}</h3>
-          <p>{{article.body}}</p>
-          <button class="button is-info" @click="editArticle(article)">Edit</button>
-          <button class="button is-warning" @click="deleteArticle(article.id)">Delete</button>
-      </div>
+      <article class="message is-primary" v-for="article in articles" v-bind:key="article.id">
+          <div class="message-header">
+              <p>{{article.title}}</p>
+              <span class="icon is-medium">
+                  <i class="mdi mdi-24px mdi-pencil-circle" v-bind:style="{ cursor: cursor }" v-on:click="editArticle"></i>
+                  <i class="mdi mdi-24px mdi-delete-circle" v-bind:style="{ cursor: cursor }" v-on:click="deleteArticle(article.id)"></i>
+              </span>
+          </div>
+          <div class="message-body">
+              {{article.body}}
+          </div>
+      </article>
       <div class="columns">
           <div class="column is-narrow">
               <b-pagination
@@ -75,7 +81,8 @@
                 order: 'is-centered',
                 size: '',
                 isSimple: false,
-                isRounded: false
+                isRounded: false,
+                cursor: 'pointer'
             }
         },
         created() {
