@@ -32,19 +32,58 @@
             <!--</li>-->
         <!--</ul>-->
       <!--</nav>-->
-      <article class="message is-primary" v-for="article in articles" v-bind:key="article.id">
-          <div class="message-header">
-              <p>{{article.title}}</p>
-              <span class="icon is-medium">
-                  <i class="mdi mdi-24px mdi-pencil-circle" v-bind:style="{ cursor: cursor }" v-on:click="editArticle"></i>
+      <nav class="">
+          <div class="level is-mobile">
+              <div class="level-left"></div>
+              <div class="level-right">
+                  <button class="button is-inverted level-item" v-on:click="addArticle">
+                      Add Task
+                  </button>
+              </div>
+          </div>
+      </nav>
+      <b-modal :active.sync="isComponentModalActive" has-modal-card>
+          <div class="modal-card">
+              <section class="modal-card-body">
+                  <b-field label="Title">
+                      <b-input
+                              type="text"
+                              v-model="article.title"
+                              v-bind:value="article.title"
+                              placeholder="Title">
+                      </b-input>
+                  </b-field>
+
+                  <b-field label="Body">
+                      <b-input
+                              type="textarea"
+                              v-model="article.body"
+                              v-bind:value="article.body"
+                              placeholder="Body">
+                      </b-input>
+                  </b-field>
+                  <button class="button" type="button" @click="isComponentModalActive = false">Cancel</button>
+                  <button class="button is-primary" @click="saveArticle">Save</button>
+              </section>
+          </div>
+      </b-modal>
+      <div class="columns">
+          <div class="column">
+              <article class="message is-success is-mobile" v-for="article in articles" v-bind:key="article.id">
+                  <div class="message-header">
+                      <p>{{article.title}}</p>
+                      <span class="icon is-medium">
+                  <i class="mdi mdi-24px mdi-pencil-circle" v-bind:style="{ cursor: cursor }" v-on:click="editArticle(article)"></i>
                   <i class="mdi mdi-24px mdi-delete-circle" v-bind:style="{ cursor: cursor }" v-on:click="deleteArticle(article.id)"></i>
               </span>
+                  </div>
+                  <div class="message-body">
+                      {{article.body}}
+                  </div>
+              </article>
           </div>
-          <div class="message-body">
-              {{article.body}}
-          </div>
-      </article>
-      <div class="columns">
+      </div>
+      <div class="columns is-centered">
           <div class="column is-narrow">
               <b-pagination
                       :total="total"
@@ -62,6 +101,8 @@
 </template>
 
 <script>
+    import modalTaskForm from './modalTask.vue'
+
     export default {
         data() {
             return {
@@ -82,7 +123,8 @@
                 size: '',
                 isSimple: false,
                 isRounded: false,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                isComponentModalActive: false,
             }
         },
         created() {
@@ -131,7 +173,7 @@
                     .catch(err => console.log(err));
                 }
             },
-            addArticle() {
+            saveArticle() {
                 if (this.edit === false) {
                     fetch('api/article', {
                         method: 'post',
@@ -147,6 +189,7 @@
                         this.article.body = '';
                         alert('Article added!');
                         this.fetchArticles();
+                        this.isComponentModalActive = false;
                     })
                     .catch(err => console.log(err));
                 } else {
@@ -164,16 +207,24 @@
                         this.article.title = '';
                         this.article.body = '';
                         alert('Article updated!');
-                        this.fetchArticles();
+                        this.fetchArticles(this.current_page);
+                        this.isComponentModalActive = false;
                     })
                     .catch(err => console.log(err));
                 }
             },
+            addArticle() {
+                this.article.title = '';
+                this.article.body = '';
+                this.isComponentModalActive = true;
+                this.edit = false;
+            },
             editArticle(article) {
-                this.edit = true;
                 this.article.article_id = article.id;
                 this.article.title = article.title;
                 this.article.body = article.body;
+                this.isComponentModalActive = true;
+                this.edit = true;
             }
         }
     }

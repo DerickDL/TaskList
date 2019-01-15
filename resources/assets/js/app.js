@@ -19,7 +19,8 @@ import 'buefy/dist/buefy.css';
 Vue.use(Buefy);
 Vue.component('articles', require('./components/articles.vue'));
 Vue.component('navbar-template', require('./components/navbar-template.vue'));
-
+Vue.component('modal-task-form', require('./components/modalTask.vue'));
+Vue.component('modal-default-form', require('./components/modalForm.vue'));
 const app = new Vue({
     el: '#app'
 });
